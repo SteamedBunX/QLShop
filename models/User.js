@@ -4,9 +4,10 @@ const userSchema = new Schema({
     username: String,
     password: String,
     createdAt: String,
-    characterName: String,
-    coins: Number,
-    battleCount: Number
+    characters: {
+        type: Schema.Types.ObjectId,
+        ref: 'characters'
+      }
 });
 
 module.exports = model('User', userSchema);
