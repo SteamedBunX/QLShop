@@ -4,6 +4,7 @@ const { JWT_KEY } = require('../../config');
 const User = require('../../models/User');
 const { UserInputError } = require('apollo-server');
 const { validateUserInfoInput } = require('../../util/validators');
+const checkAuth = require('../../util/check-auth');
 
 var Mutation = {};
 
@@ -26,8 +27,7 @@ Mutation.register = async (_, { username, password }, context, info) => {
     password = await bcrypt.hash(password, 12);
     const newUser = new User({ username, password, createdAt: new Date().toISOString() });
     const res = await newUser.save();
-
-    const token = generateToken(username, password);
+    const token = generateToken(res.id, username, password);
 
     return {
         username: res.username,
@@ -62,7 +62,7 @@ Mutation.login = async (_, { username, password }, context, info) => {
         });
     }
 
-    const token = generateToken(user);
+    const token = generateToken(user.id, user.username, user.password);
 
     return {
         id: user.id,
@@ -72,10 +72,16 @@ Mutation.login = async (_, { username, password }, context, info) => {
     };
 }
 
+Mutation.createCharacter = async (_, { characterName }, context) => {
+    const user = checkAuth(context);
+    return "";
+}
+
 module.exports.Mutation = Mutation;
 
-function generateToken(username, password) {
+function generateToken(id, username, password) {
     return jwt.sign({
+        id: id,
         username: username,
         password: password
     }, JWT_KEY, { expiresIn: '1h' });
