@@ -4,7 +4,7 @@ const userSchema = new Schema({
     username: String,
     password: String,
     createdAt: String,
-    characters: {
+    character: {
         type: Schema.Types.ObjectId,
         ref: 'characters'
       }

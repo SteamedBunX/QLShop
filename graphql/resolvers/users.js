@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_KEY } = require('../../config');
 const User = require('../../models/User');
-const { UserInputError } = require('apollo-server');
+const Character = require('../../models/Character')
+const { UserInputError, AuthenticationError } = require('apollo-server');
 const { validateUserInfoInput } = require('../../util/validators');
 const checkAuth = require('../../util/check-auth');
 
@@ -72,9 +73,41 @@ Mutation.login = async (_, { username, password }, context, info) => {
     };
 }
 
-Mutation.createCharacter = async (_, { characterName }, context) => {
-    const user = checkAuth(context);
-    return "";
+Mutation.createNewCharacter = async (_, { characterName }, context) => {
+
+    const tokenData = checkAuth(context);
+    const user = await User.findById(tokenData.id);
+    if (!user) {
+        throw new AuthenticationError('Unable to find the user for the token');
+    }
+
+    if (characterName.trim() === '') {
+        throw new UserInputError('Empty comment', {
+            errors: {
+                body: 'Character Name must not empty'
+            }
+        });
+    }
+
+    const oldCharacterId = user.character;
+    if(oldCharacterId) {
+        Character.findByIdAndDelete(oldCharacterId, (err, res) => {
+            if(!err) {
+                console.log('operation complete');
+            }
+        }); 
+    }
+
+    const newCharacter = new Character({ name: characterName, coins: 100, battleCount: 0 });
+    await newCharacter.save();
+    user.character = newCharacter;
+    console.log(newCharacter);
+    const res = await user.save();
+    return {
+        ...user._doc,
+        id: user.id,
+        character: newCharacter
+    };
 }
 
 module.exports.Mutation = Mutation;

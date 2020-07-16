@@ -1,10 +1,9 @@
 const { model, Schema } = require('mongoose');
 
 const characterSchema = new Schema({
-    characterName: String,
+    name: String,
     coins: Number,
-    battleCount: Number,
-    alive: Boolean
+    battleCount: Number
 });
 
 module.exports = model('Character', characterSchema);

@@ -5,7 +5,7 @@ const typeDefs = gql`
     type User{
         id: ID!
         username: String!
-        token: String!
+        token: String
         createdAt: String!
         character: Character
     }
@@ -20,7 +20,7 @@ const typeDefs = gql`
     type Mutation{
         register(username: String! ,password: String!): User!
         login(username: String! ,password: String!): User!
-        createCharacter(characterName: String!): String
+        createNewCharacter(characterName: String!): User!
     }
 `;
 
