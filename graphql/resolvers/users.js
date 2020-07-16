@@ -8,6 +8,30 @@ const { validateUserInfoInput } = require('../../util/validators');
 const checkAuth = require('../../util/check-auth');
 
 var Mutation = {};
+var Query = {};
+
+Query.getUser = async (_, {}, context) => {
+    const tokenData = checkAuth(context);
+    const user = await User.findById(tokenData.id);
+    if (!user) {
+        throw new AuthenticationError('Unable to find the user for the token');
+    }
+    const characterId = user.character;
+    var character;
+    if(characterId) {
+        await Character.findById(characterId, (err, res) => {
+            if(!err) {
+             character = res;
+            }
+        }); 
+    }
+
+    return {
+        ...user._doc,
+        id: user.id,
+        character
+    };
+}
 
 Mutation.register = async (_, { username, password }, context, info) => {
     // TODO: Validate User Input
@@ -73,6 +97,8 @@ Mutation.login = async (_, { username, password }, context, info) => {
     };
 }
 
+
+
 Mutation.createNewCharacter = async (_, { characterName }, context) => {
 
     const tokenData = checkAuth(context);
@@ -92,8 +118,8 @@ Mutation.createNewCharacter = async (_, { characterName }, context) => {
     const oldCharacterId = user.character;
     if(oldCharacterId) {
         Character.findByIdAndDelete(oldCharacterId, (err, res) => {
-            if(!err) {
-                console.log('operation complete');
+            if(err) {
+                console.log('failed to delete the Old Character', err);
             }
         }); 
     }
@@ -111,6 +137,7 @@ Mutation.createNewCharacter = async (_, { characterName }, context) => {
 }
 
 module.exports.Mutation = Mutation;
+module.exports.Query = Query;
 
 function generateToken(id, username, password) {
     return jwt.sign({

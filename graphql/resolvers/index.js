@@ -1,12 +1,12 @@
 const usersResolvers = require('./users');
+const charactersResolvers = require('./characters');
 
 module.exports = {
     Query: {
-        helloWorld: () => {
-            return 'Hello World!';
-        }
+        ...usersResolvers.Query,
     },
     Mutation: {
         ...usersResolvers.Mutation,
+        ...charactersResolvers.Mutation,
     }
 };

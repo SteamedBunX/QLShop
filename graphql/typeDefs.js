@@ -1,7 +1,6 @@
 const gql = require('graphql-tag');
 
 const typeDefs = gql`
-
     type User{
         id: ID!
         username: String!
@@ -14,13 +13,18 @@ const typeDefs = gql`
         battleCount: Int!
         coins: Int!
     }
+    type taskResult{
+        newTotleCoins: Int!
+        taskRewards: [Int]!
+    }
     type Query{
-        helloWorld: String!
+        getUser: User!
     }
     type Mutation{
         register(username: String! ,password: String!): User!
         login(username: String! ,password: String!): User!
         createNewCharacter(characterName: String!): User!
+        completeTask(totalTimes: Int): taskResult!
     }
 `;
 
