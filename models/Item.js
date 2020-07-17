@@ -2,6 +2,7 @@ const { model, Schema } = require('mongoose');
 
 const itemSchema = new Schema({
     name: String,
+    typeId: Number,
     description: String,
     attributes: [
         {

@@ -16,6 +16,7 @@ const typeDefs = gql`
     type Item{
         id: ID!
         name: String!
+        typeId: Int!
         description: String!
         attributes: [Attribute]!
     }
@@ -29,6 +30,7 @@ const typeDefs = gql`
     }
     type Query{
         getUser: User!
+        getItem(itemId: String!): Item!
     }
     type Mutation{
         register(username: String! ,password: String!): User!
