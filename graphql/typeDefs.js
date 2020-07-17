@@ -13,6 +13,16 @@ const typeDefs = gql`
         battleCount: Int!
         coins: Int!
     }
+    type Item{
+        id: ID!
+        name: String!
+        description: String!
+        attributes: [Attribute]!
+    }
+    type Attribute{
+        name: String,
+        value: String
+    }
     type taskResult{
         newTotleCoins: Int!
         taskRewards: [Int]!
