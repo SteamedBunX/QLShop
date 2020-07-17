@@ -4,18 +4,23 @@ const Item = require('../../models/Item');
 
 var Query = {};
 
-Query.getItem = async (_, { itemId }, context) => {
-    var item = {};
-    await Item.findById(itemId, (err, res) => {
-        if (err) {
-            throw new UserInputError('Could not find the requested Item', {
-                error: err
-            });
-        }
-        item = res;
+Query.getItems = async (_, { itemIds }, context) => {
+    var items = [];
+    await itemIds.forEachAsync(async itemId => {
+        await Item.findById(itemId, (err, res) => {
+            items.push(res);
+        });
     });
 
-    return item;
+    if (Array.isArray(items) && items.length) {
+        return items;
+    }
+
+    throw new UserInputError('Could not find the requested Items');
 }
 
 module.exports.Query = Query;
+
+Array.prototype.forEachAsync = async function (fn) {
+    for (let t of this) { await fn(t) }
+}

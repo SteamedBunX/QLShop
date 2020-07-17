@@ -30,7 +30,7 @@ const typeDefs = gql`
     }
     type Query{
         getUser: User!
-        getItem(itemId: String!): Item!
+        getItems(itemIds: [String!]): [Item]!
     }
     type Mutation{
         register(username: String! ,password: String!): User!
