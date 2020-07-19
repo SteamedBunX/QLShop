@@ -1,7 +1,14 @@
+module.exports.gearGroupId = {
+    MELEE_WEAPON: 0,
+    RANGED_WEAPON: 1,
+    ARMOR: 2,
+    HELMET: 3,
+    GAUNTLET: 4,
+    TROUSER: 5,
+}
+
 module.exports.itemTypeId = {
-    weapon: 0,
-    armor: 1,
-    consumable: 2,
-    material: 3,
-    key: 4,
+    GEAR: 0,
+    CONSUMABLE: 1,
+    MATERIAL: 2,
 }

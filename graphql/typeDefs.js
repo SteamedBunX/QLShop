@@ -13,12 +13,29 @@ const typeDefs = gql`
         battleCount: Int!
         coins: Int!
     }
-    type Item{
+    interface Item{
         id: ID!
         name: String!
-        typeId: Int!
+        description: String!
+    }
+    type Gear implements Item{
+        id: ID!
+        name: String!
+        gearGroupId: Int
         description: String!
         attributes: [Attribute]!
+    }
+    type Consumable implements Item {
+        id: ID!
+        name: String!
+        description: String!
+        effect: String!
+        cooldown: Int
+    }
+    type Material implements Item {
+        id: ID!
+        name: String!
+        description: String!
     }
     type Attribute{
         name: String,

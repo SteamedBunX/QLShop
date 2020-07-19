@@ -3,6 +3,7 @@ const charactersResolvers = require('./characters');
 const itemsResolvers = require('./items')
 
 module.exports = {
+    ...itemsResolvers.TypeResolver,
     Query: {
         ...usersResolvers.Query,
         ...itemsResolvers.Query,

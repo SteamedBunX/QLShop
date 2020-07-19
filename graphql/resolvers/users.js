@@ -23,7 +23,7 @@ Query.getUser = async (_, {}, context) => {
             if(!err) {
              character = res;
             }
-        }); 
+        });
     }
 
     return {
