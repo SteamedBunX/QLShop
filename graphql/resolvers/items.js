@@ -6,6 +6,9 @@ var Query = {};
 var TypeResolver = {};
 
 Query.getItems = async (_, { itemIds }, context) => {
+    if(!itemIds || itemIds.length < 1) {
+        return Item.find();
+    }
     var items = [];
     await itemIds.forEachAsync(async itemId => {
         await Item.findById(itemId, (err, res) => {

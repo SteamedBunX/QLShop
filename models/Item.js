@@ -8,7 +8,8 @@ const itemSchema = new Schema({
     attributes: [
         {
             name: String,
-            value: String
+            value: String,
+            isPercentage: Boolean
         }
     ],
     effect: String,

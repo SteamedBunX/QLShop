@@ -38,8 +38,9 @@ const typeDefs = gql`
         description: String!
     }
     type Attribute{
-        name: String,
-        value: String
+        name: String!
+        value: String!
+        isPercentage: Boolean!
     }
     type taskResult{
         newTotleCoins: Int!
