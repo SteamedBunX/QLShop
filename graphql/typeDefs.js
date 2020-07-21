@@ -21,7 +21,7 @@ const typeDefs = gql`
     type Gear implements Item{
         id: ID!
         name: String!
-        gearGroupId: Int
+        gearTypeId: Int
         description: String!
         attributes: [Attribute]!
     }
@@ -40,15 +40,14 @@ const typeDefs = gql`
     type Attribute{
         name: String!
         value: String!
-        isPercentage: Boolean!
     }
     type taskResult{
-        newTotleCoins: Int!
+        newTotalCoins: Int!
         taskRewards: [Int]!
     }
     type Query{
         getUser: User!
-        getItems(itemIds: [String!]): [Item]!
+        getItems(itemIds: [String!], typeId: [Int!], gearTypeId: [Int!]): [Item]!
     }
     type Mutation{
         register(username: String! ,password: String!): User!

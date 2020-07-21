@@ -1,20 +1,45 @@
 const { UserInputError } = require('apollo-server');
-const { itemTypeId, gearGroupId } = require('../../constants');
+const { itemTypeId } = require('../../constants');
 const Item = require('../../models/Item');
 
 var Query = {};
 var TypeResolver = {};
 
-Query.getItems = async (_, { itemIds }, context) => {
-    if(!itemIds || itemIds.length < 1) {
+Query.getItems = async (_, { itemIds, typeId, gearTypeId }, context) => {
+    var items = [];
+    var gearIncluded = false;
+    if (Array.isArray(itemIds) && itemIds.length) {
+        await itemIds.forEachAsync(async itemId => {
+            await Item.findById(itemId, (err, res) => {
+                items.push(res);
+            });
+        });
+    } else if (Array.isArray(typeId) && typeId.length) {
+        await typeId.forEachAsync(async typeId => {
+            if (typeId === 0) {
+                gearIncluded = true;
+            } else {
+                await Item.find({ typeId }, (err, res) => {
+                    items = [...items, ...res];
+                });
+            }
+        });
+        if (gearIncluded) {
+            if (Array.isArray(gearTypeId) && gearTypeId.length) {
+                await typeId.forEachAsync(async typeId => {
+                    await Item.find({ gearTypeId }, (err, res) => {
+                        items = [...items, ...res];
+                    });
+                });
+            } else {
+                await Item.find({ typeId: 0 }, (err, res) => {
+                    items = [...items, ...res];
+                });
+            }
+        }
+    } else {
         return Item.find();
     }
-    var items = [];
-    await itemIds.forEachAsync(async itemId => {
-        await Item.findById(itemId, (err, res) => {
-            items.push(res);
-        });
-    });
 
     if (Array.isArray(items) && items.length) {
         return items;

@@ -1,4 +1,4 @@
-module.exports.gearGroupId = {
+module.exports.gearTypeId = {
     MELEE_WEAPON: 0,
     RANGED_WEAPON: 1,
     ARMOR: 2,

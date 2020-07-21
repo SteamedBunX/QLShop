@@ -28,7 +28,7 @@ Mutation.completeTask = async (_, { totalTimes }, context) => {
     character.save();
 
     return{
-        newTotleCoins: totalCoins,
+        newTotalCoins: totalCoins,
         taskRewards
     }
 }
