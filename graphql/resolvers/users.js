@@ -119,7 +119,7 @@ Mutation.createNewCharacter = async (_, { characterName }, context) => {
     if(oldCharacterId) {
         Character.findByIdAndDelete(oldCharacterId, (err, res) => {
             if(err) {
-                console.log('failed to delete the Old Character', err);
+                throw new Error('failed to delete the Old Character');
             }
         }); 
     }
@@ -127,7 +127,6 @@ Mutation.createNewCharacter = async (_, { characterName }, context) => {
     const newCharacter = new Character({ name: characterName, coins: 100, battleCount: 0 });
     await newCharacter.save();
     user.character = newCharacter;
-    console.log(newCharacter);
     const res = await user.save();
     return {
         ...user._doc,
