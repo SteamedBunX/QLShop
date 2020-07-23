@@ -10,7 +10,7 @@ const checkAuth = require('../../util/check-auth');
 var Mutation = {};
 var Query = {};
 
-Query.getUser = async (_, {}, context) => {
+Query.getUser = async (_, { }, context) => {
     const tokenData = checkAuth(context);
     const user = await User.findById(tokenData.id);
     if (!user) {
@@ -18,10 +18,10 @@ Query.getUser = async (_, {}, context) => {
     }
     const characterId = user.character;
     var character;
-    if(characterId) {
+    if (characterId) {
         await Character.findById(characterId, (err, res) => {
-            if(!err) {
-             character = res;
+            if (!err) {
+                character = res;
             }
         });
     }
@@ -116,12 +116,12 @@ Mutation.createNewCharacter = async (_, { characterName }, context) => {
     }
 
     const oldCharacterId = user.character;
-    if(oldCharacterId) {
+    if (oldCharacterId) {
         Character.findByIdAndDelete(oldCharacterId, (err, res) => {
-            if(err) {
+            if (err) {
                 throw new Error('failed to delete the Old Character');
             }
-        }); 
+        });
     }
 
     const newCharacter = new Character({ name: characterName, coins: 100, battleCount: 0 });

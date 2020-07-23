@@ -12,11 +12,21 @@ const typeDefs = gql`
         name: String!
         battleCount: Int!
         coins: Int!
+        inventory: [InventoryItem]!
+    }
+    type InventoryItem{
+        itemId: ID!
+        amount: Int!
+    }
+    type TaskRewardItem{
+        itemId: ID!
+        amount: Int!
     }
     interface Item{
         id: ID!
         name: String!
         description: String!
+        sellPrice: Int
     }
     type Gear implements Item{
         id: ID!
@@ -24,6 +34,7 @@ const typeDefs = gql`
         gearTypeId: Int
         description: String!
         attributes: [Attribute]!
+        sellPrice: Int
     }
     type Consumable implements Item {
         id: ID!
@@ -31,11 +42,13 @@ const typeDefs = gql`
         description: String!
         effect: String!
         cooldown: Int
+        sellPrice: Int
     }
     type Material implements Item {
         id: ID!
         name: String!
         description: String!
+        sellPrice: Int
     }
     type Attribute{
         name: String!
@@ -43,7 +56,8 @@ const typeDefs = gql`
     }
     type taskResult{
         newTotalCoins: Int!
-        taskRewards: [Int]!
+        coinRewards: [Int]!
+        itemRewards: [TaskRewardItem]!
     }
     type Query{
         getUser: User!
