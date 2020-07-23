@@ -61,6 +61,7 @@ const typeDefs = gql`
     }
     type Query{
         getUser: User!
+        getCharacter: Character
         getItems(itemIds: [String!], typeId: [Int!], gearTypeId: [Int!]): [Item]!
     }
     type Mutation{

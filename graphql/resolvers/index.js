@@ -7,6 +7,7 @@ module.exports = {
     Query: {
         ...usersResolvers.Query,
         ...itemsResolvers.Query,
+        ...charactersResolvers.Query,
     },
     Mutation: {
         ...usersResolvers.Mutation,

@@ -7,6 +7,7 @@ const { UserInputError, AuthenticationError } = require('apollo-server');
 const checkAuth = require('../../util/check-auth');
 
 var Mutation = {};
+var Query = {};
 
 Mutation.completeTask = async (_, { totalTimes }, context) => {
 
@@ -88,4 +89,26 @@ function generateItemRewards(lootTable, totalTimes) {
     return itemRewards
 }
 
+Query.getCharacter = async (_, { }, context) => {
+    const tokenData = checkAuth(context);
+    const user = await User.findById(tokenData.id);
+    if (!user) {
+        throw new AuthenticationError('Unable to find the user for the token');
+    }
+    const characterId = user.character;
+    var character;
+    if (characterId) {
+        await Character.findById(characterId, (err, res) => {
+            if (!err) {
+                character = res;
+            } else {
+                character = null;
+            }
+        });
+    }
+
+    return character;
+}
+
 module.exports.Mutation = Mutation;
+module.exports.Query = Query;

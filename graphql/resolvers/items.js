@@ -61,7 +61,6 @@ TypeResolver.Item.__resolveType = (item, context, info) => {
 }
 
 module.exports.Query = Query;
-
 module.exports.TypeResolver = TypeResolver;
 
 Array.prototype.forEachAsync = async function (fn) {
