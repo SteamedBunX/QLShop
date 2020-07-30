@@ -6,6 +6,7 @@ const Character = require('../../models/Character')
 const { UserInputError, AuthenticationError } = require('apollo-server');
 const { validateUserInfoInput } = require('../../util/validators');
 const checkAuth = require('../../util/check-auth');
+const getCharacter = require(`../../util/get-character`);
 
 var Mutation = {};
 var Query = {};
@@ -19,11 +20,7 @@ Query.getUser = async (_, { }, context) => {
     const characterId = user.character;
     var character;
     if (characterId) {
-        await Character.findById(characterId, (err, res) => {
-            if (!err) {
-                character = res;
-            }
-        });
+        character = await getCharacter(characterId);
     }
 
     return {
@@ -117,7 +114,7 @@ Mutation.createNewCharacter = async (_, { characterName }, context) => {
 
     const oldCharacterId = user.character;
     if (oldCharacterId) {
-        Character.findByIdAndDelete(oldCharacterId, (err, res) => {
+        await Character.findByIdAndDelete(oldCharacterId, (err, res) => {
             if (err) {
                 throw new Error('failed to delete the Old Character');
             }

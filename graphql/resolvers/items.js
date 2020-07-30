@@ -10,35 +10,33 @@ Query.getItems = async (_, { itemIds, typeId, gearTypeId }, context) => {
     var gearIncluded = false;
     if (Array.isArray(itemIds) && itemIds.length) {
         await itemIds.forEachAsync(async itemId => {
-            await Item.findById(itemId, (err, res) => {
-                items.push(res);
-            });
+            const newItem = await Item.findById(itemId);
+            items.push(newItem);
         });
     } else if (Array.isArray(typeId) && typeId.length) {
         await typeId.forEachAsync(async typeId => {
             if (typeId === 0) {
                 gearIncluded = true;
             } else {
-                await Item.find({ typeId }, (err, res) => {
-                    items = [...items, ...res];
-                });
+                const newTypeSet = await Item.find({ typeId });
+                items = [...items, ...newTypeSet];
             }
         });
         if (gearIncluded) {
             if (Array.isArray(gearTypeId) && gearTypeId.length) {
                 await typeId.forEachAsync(async typeId => {
-                    await Item.find({ gearTypeId }, (err, res) => {
-                        items = [...items, ...res];
-                    });
+                    const newGearSet = await Item.find({ gearTypeId });
+                    items = [...items, ...newGearSet];
                 });
             } else {
-                await Item.find({ typeId: 0 }, (err, res) => {
-                    items = [...items, ...res];
-                });
+                // not type specific.
+                const gearSet = await Item.find({ typeId: 0 });
+                items = [...items, ...gearSet];
+
             }
         }
     } else {
-        return Item.find();
+        return await Item.find();
     }
 
     if (Array.isArray(items) && items.length) {

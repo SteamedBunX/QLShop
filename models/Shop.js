@@ -3,14 +3,11 @@ const { model, Schema } = require('mongoose');
 const shopSchema = new Schema({
     name: String,
     minimiumBattleCount: Number,
-    ownerName: String,
+    shopKeeperName: String,
     inventory: [
         {
             purchasePrice: Number,
-            item: {
-                type: Schema.Types.ObjectId,
-                ref: 'characters'
-            }
+            itemId: String
         }
     ]
 });

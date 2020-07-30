@@ -50,6 +50,15 @@ const typeDefs = gql`
         description: String!
         sellPrice: Int
     }
+    input SellRequest{
+        itemId: ID!
+        amount: Int!
+    }
+    type SellResult{
+        totalSellPrice: Int!
+        updatedInventory: [InventoryItem]!
+        updatedCoinAmount: Int!
+    }
     type Attribute{
         name: String!
         value: String!
@@ -69,6 +78,7 @@ const typeDefs = gql`
         login(username: String! ,password: String!): User!
         createNewCharacter(characterName: String!): User!
         completeTask(totalTimes: Int): taskResult!
+        sellItems(sellRequests: [SellRequest]!): SellResult
     }
 `;
 
