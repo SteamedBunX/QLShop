@@ -1,9 +1,10 @@
 const { model, Schema } = require('mongoose');
 
 const shopSchema = new Schema({
+    _id: Number,
     name: String,
     minimiumBattleCount: Number,
-    shopKeeperName: String,
+    shopKeeper: String,
     inventory: [
         {
             purchasePrice: Number,

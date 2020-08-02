@@ -63,21 +63,33 @@ const typeDefs = gql`
         name: String!
         value: String!
     }
-    type taskResult{
+    type TaskResult{
         newTotalCoins: Int!
         coinRewards: [Int]!
         itemRewards: [TaskRewardItem]!
+    }
+    type ShopItem{
+        purchasePrice: Int,
+        itemId: String
+    }
+    type Shop{
+        id: Int!
+        name: String!
+        minimiumBattleCount: Int!
+        shopKeeper: String!
+        inventory: [ShopItem]!
     }
     type Query{
         getUser: User!
         getCharacter: Character
         getItems(itemIds: [String!], typeId: [Int!], gearTypeId: [Int!]): [Item]!
+        getShops(shopId: [Int!]): [Shop]!
     }
     type Mutation{
         register(username: String! ,password: String!): User!
         login(username: String! ,password: String!): User!
         createNewCharacter(characterName: String!): User!
-        completeTask(totalTimes: Int): taskResult!
+        completeTask(totalTimes: Int): TaskResult!
         sellItems(sellRequests: [SellRequest]!): SellResult
     }
 `;
