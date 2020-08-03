@@ -82,8 +82,8 @@ const typeDefs = gql`
     type Query{
         getUser: User!
         getCharacter: Character
-        getItems(itemIds: [String!], typeId: [Int!], gearTypeId: [Int!]): [Item]!
-        getShops(shopId: [Int!]): [Shop]!
+        getItems(itemIds: [String!], typeIds: [Int!], gearTypeIds: [Int!]): [Item]!
+        getShops(shopIds: [Int!]): [Shop]!
     }
     type Mutation{
         register(username: String! ,password: String!): User!

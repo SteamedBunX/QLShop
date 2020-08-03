@@ -5,35 +5,22 @@ const Item = require('../../models/Item');
 var Query = {};
 var TypeResolver = {};
 
-Query.getItems = async (_, { itemIds, typeId, gearTypeId }, context) => {
+Query.getItems = async (_, { itemIds, typeIds, gearTypeIds }, context) => {
     var items = [];
-    var gearIncluded = false;
+    var gearIncludedWithType = false;
     if (Array.isArray(itemIds) && itemIds.length) {
-        await itemIds.forEachAsync(async itemId => {
-            const newItem = await Item.findById(itemId);
-            items.push(newItem);
-        });
-    } else if (Array.isArray(typeId) && typeId.length) {
-        await typeId.forEachAsync(async typeId => {
-            if (typeId === 0) {
-                gearIncluded = true;
-            } else {
-                const newTypeSet = await Item.find({ typeId });
-                items = [...items, ...newTypeSet];
-            }
-        });
-        if (gearIncluded) {
-            if (Array.isArray(gearTypeId) && gearTypeId.length) {
-                await typeId.forEachAsync(async typeId => {
-                    const newGearSet = await Item.find({ gearTypeId });
-                    items = [...items, ...newGearSet];
-                });
-            } else {
-                // not type specific.
-                const gearSet = await Item.find({ typeId: 0 });
-                items = [...items, ...gearSet];
-
-            }
+        items = await Item.find().where('_id').in(itemIds).exec();
+    } else if (Array.isArray(typeIds) && typeIds.length) {
+        var indexOfGearType = typeIds.indexOf(0);
+        if (indexOfGearType > -1 && Array.isArray(gearTypeIds) && gearTypeIds.length) {
+            typeIds.splice(indexOfGearType, 1);
+            gearIncludedWithType = true;
+        }
+        const newTypeSet = await Item.find().where('typeId').in(typeIds);
+        items = newTypeSet;
+        if (gearIncludedWithType) {
+            const newGearSet = await Item.find().where('gearTypeId').in(gearTypeIds);
+            items = [...items, ...newGearSet];
         }
     } else {
         return await Item.find();
@@ -60,7 +47,3 @@ TypeResolver.Item.__resolveType = (item, context, info) => {
 
 module.exports.Query = Query;
 module.exports.TypeResolver = TypeResolver;
-
-Array.prototype.forEachAsync = async function (fn) {
-    for (let t of this) { await fn(t) }
-}
