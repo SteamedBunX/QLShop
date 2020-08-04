@@ -9,7 +9,9 @@ const mongoose = require('mongoose');
 
 // -Constants
 const { MONGODB_CONNECT_STRING } = require('./config');
-// -Functions
+// -Initiate Static Table
+const StaticTables = require('./util/static-tables');
+StaticTables.initialized;
 
 const server = new ApolloServer({
     typeDefs,

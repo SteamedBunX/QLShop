@@ -4,6 +4,7 @@ const Item = require('../../models/Item');
 const { AuthenticationError } = require('apollo-server');
 const checkAuth = require('../../util/check-auth');
 const getCharacter = require(`../../util/get-character`);
+const StaticTables = require('../../util/static-tables');
 
 var Mutation = {};
 var Query = {};
@@ -22,8 +23,7 @@ Mutation.completeTask = async (_, { totalTimes }, context) => {
     character.coins = character.coins + totalCoinReward;
 
     // create a list of loots, and update character's inventory
-    var lootTable = await Item.find({ typeId: 2 }, { _id: 1 });
-    lootTable = lootTable.map(a => a._id);
+    const lootTable = await StaticTables.initialized.lootTable;
     const itemRewards = generateItemRewards(lootTable, totalTimes);
     var remappedItemRewards = [];
 
@@ -106,8 +106,7 @@ Mutation.sellItems = async (_, { sellRequests }, context) => {
     var character = await getCharacter(user.character);
 
     // Check for validality of Item
-    var itemTable = await Item.find({}, { _id: 1, sellPrice: 1 });
-    itemTable = itemTable.map(item => {return {_id: item._id.toString(), sellPrice: item.sellPrice}});
+    const itemTable = await StaticTables.initialized.itemTable;
 
     var totalSellPrice = 0;
 
