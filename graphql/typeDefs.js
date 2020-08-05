@@ -50,12 +50,12 @@ const typeDefs = gql`
         description: String!
         sellPrice: Int
     }
-    input SellRequest{
+    input TransactionRequest{
         itemId: ID!
         amount: Int!
     }
-    type SellResult{
-        totalSellPrice: Int!
+    type TransactionResult{
+        transactionAmount: Int!
         updatedInventory: [InventoryItem]!
         updatedCoinAmount: Int!
     }
@@ -90,7 +90,8 @@ const typeDefs = gql`
         login(username: String! ,password: String!): User!
         createNewCharacter(characterName: String!): User!
         completeTask(totalTimes: Int): TaskResult!
-        sellItems(sellRequests: [SellRequest]!): SellResult
+        buyItems(shopId: Int!, purchaseRequests: [TransactionRequest]!): TransactionResult!
+        sellItems(sellRequests: [TransactionRequest]!): TransactionResult!
     }
 `;
 

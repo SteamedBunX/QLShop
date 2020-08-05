@@ -144,7 +144,7 @@ Mutation.sellItems = async (_, { sellRequests }, context) => {
     character.save();
 
     return {
-        totalSellPrice,
+        transactionAmount: totalSellPrice,
         updatedInventory: character.inventory,
         updatedCoinAmount: character.coins
     }

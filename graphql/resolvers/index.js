@@ -14,5 +14,6 @@ module.exports = {
     Mutation: {
         ...usersResolvers.Mutation,
         ...charactersResolvers.Mutation,
+        ...shopsResolvers.Mutation,
     }
 };
